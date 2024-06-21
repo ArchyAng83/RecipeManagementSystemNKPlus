@@ -1,4 +1,8 @@
 
+using Microsoft.EntityFrameworkCore;
+using RecipeManagementSystemNKPlus.Infrastructure.DataAccess;
+using System;
+
 namespace RecipeManagementSystemNKPlus.WebApi
 {
     public class Program
@@ -13,6 +17,11 @@ namespace RecipeManagementSystemNKPlus.WebApi
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<RecipeDbContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
 
             var app = builder.Build();
 
