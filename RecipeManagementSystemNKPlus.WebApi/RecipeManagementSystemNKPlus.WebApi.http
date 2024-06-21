@@ -1,0 +1,6 @@
+@RecipeManagementSystemNKPlus.WebApi_HostAddress = http://localhost:5163
+
+GET {{RecipeManagementSystemNKPlus.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
