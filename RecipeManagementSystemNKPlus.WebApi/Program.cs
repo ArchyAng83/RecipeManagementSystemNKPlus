@@ -1,6 +1,9 @@
 
 using Microsoft.EntityFrameworkCore;
+using RecipeManagementSystemNKPlus.Application.Interfaces;
+using RecipeManagementSystemNKPlus.Domain.Entities;
 using RecipeManagementSystemNKPlus.Infrastructure.DataAccess;
+using RecipeManagementSystemNKPlus.Infrastructure.Repositories;
 using System;
 
 namespace RecipeManagementSystemNKPlus.WebApi
@@ -22,6 +25,8 @@ namespace RecipeManagementSystemNKPlus.WebApi
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            builder.Services.AddScoped<IGenericOwnedRepository<CompositeType>, CompositeTypeRepository>();
 
             var app = builder.Build();
 

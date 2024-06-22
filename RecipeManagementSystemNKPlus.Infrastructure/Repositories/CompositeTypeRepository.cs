@@ -52,11 +52,6 @@ namespace RecipeManagementSystemNKPlus.Infrastructure.Repositories
         {
             if (entity is not null)
             {
-                if (!CheckName(entity.Name))
-                {
-                    return new GeneralResponse(false, "Already exist.");
-                }
-
                 context.CompositeTypes.Update(entity);
                 await context.SaveChangesAsync();
                 return SaveSuccess();
@@ -65,8 +60,8 @@ namespace RecipeManagementSystemNKPlus.Infrastructure.Repositories
             return GetNotFound();
         }
 
-        private GeneralResponse GetNotFound() => new(false, "CompositeType not found.");
-        private GeneralResponse SaveSuccess() => new(true, "CompositeType saved successfully!");
+        private static GeneralResponse GetNotFound() => new(false, "CompositeType not found.");
+        private static GeneralResponse SaveSuccess() => new(true, "CompositeType saved successfully!");
         
         private bool CheckName(string name)
         {
