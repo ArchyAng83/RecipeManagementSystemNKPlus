@@ -27,6 +27,7 @@ namespace RecipeManagementSystemNKPlus.WebApi
             });
 
             builder.Services.AddScoped<IGenericOwnedRepository<CompositeType>, CompositeTypeRepository>();
+            builder.Services.AddScoped<IGenericOwnedRepository<Ingredient>, IngredientRepository>();
 
             var app = builder.Build();
 
