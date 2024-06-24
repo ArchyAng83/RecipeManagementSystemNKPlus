@@ -52,6 +52,11 @@ namespace RecipeManagementSystemNKPlus.Infrastructure.Repositories
         {
             if (entity is not null)
             {
+                if (!CheckName(entity.Name))
+                {
+                    return new GeneralResponse(false, "Already exist.");
+                }
+
                 context.Ingredients.Update(entity);
                 await context.SaveChangesAsync();
                 return SaveSuccess();

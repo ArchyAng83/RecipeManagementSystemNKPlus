@@ -1,0 +1,105 @@
+﻿@page "/ingredients"
+
+<h3>Ingredients</h3>
+
+<div class="row g-3 align-items-center">
+    <EditForm Model="_ingredient">
+        <div class="form-group row">
+            <div class="col-auto">
+                <label for="name" class="col-auto col-form-label">
+                    Ingredient Name:
+                </label>
+            </div>
+            <div class="col-4">
+                <div class="col-lg-auto mb-3">
+                    <InputText id="name" class="form-control" @bind-Value="_ingredient.Name" />
+                    <ValidationMessage For="() => _ingredient.Name" />
+                </div>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-success" type="submit" @onclick="async () => await SaveIngredient()">
+                    <i class="bi bi-check2"></i>
+                    Save
+                </button>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+<div class="container-fluid">
+    @if (_ingredients is null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <div class="row">
+            <table class="table table-bordered text-center">
+                <thead>
+                    <tr>
+                        <th>Ingredient</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var ingredient in _ingredients)
+                    {
+                        <tr>
+                            <td>@ingredient.Name</td>
+                            <td>
+                                <div class="d-grid gap-2 d-md-block">
+                                    <button class="btn btn-warning" type="button" @onclick="() => {_ingredient = ingredient; }">
+                                        <i class="bi bi-pencil"></i>
+                                        Edit
+                                    </button>
+                                    <button class="btn btn-danger " type="button" @onclick="async () => await DeleteIngredient(ingredient)">
+                                        <i class="bi bi-trash"></i>
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+
+@code {
+    private List<Ingredient>? _ingredients = new();
+    private Ingredient _ingredient = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        _ingredients = await IngredientService.GetAllAsync(Constant.IngredientBaseUrl);
+        StateHasChanged();
+    }
+
+    private async Task SaveIngredient()
+    {
+        if (_ingredient.Id <= 0)
+        {
+            await IngredientService.AddAsync(Constant.IngredientBaseUrl, _ingredient);
+        }
+        else
+        {
+            await IngredientService.UpdateAsync(Constant.IngredientBaseUrl, _ingredient);
+        }
+
+        await LoadData();
+    }
+
+    private async Task DeleteIngredient(Ingredient ingredient)
+    {
+        var response = await IngredientService.DeleteAsync(Constant.IngredientBaseUrl, ingredient.Id);
+        await LoadData();
+    }
+
+}

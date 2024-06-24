@@ -5,17 +5,17 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{80F022B1-8320-49AF-A464-E6AEC041CB88}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeManagementSystemNKPlus.Domain", "RecipeManagementSystemNKPlus.Domain\RecipeManagementSystemNKPlus.Domain.csproj", "{04F9B013-20C4-4FEA-A118-44A2734A8823}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeManagementSystemNKPlus.Domain", "RecipeManagementSystemNKPlus.Domain\RecipeManagementSystemNKPlus.Domain.csproj", "{04F9B013-20C4-4FEA-A118-44A2734A8823}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeManagementSystemNKPlus.Application", "RecipeManagementSystemNKPlus.Application\RecipeManagementSystemNKPlus.Application.csproj", "{4EE5CC85-F638-4CD8-9B90-534E6592063C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeManagementSystemNKPlus.Application", "RecipeManagementSystemNKPlus.Application\RecipeManagementSystemNKPlus.Application.csproj", "{4EE5CC85-F638-4CD8-9B90-534E6592063C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeManagementSystemNKPlus.Infrastructure", "RecipeManagementSystemNKPlus.Infrastructure\RecipeManagementSystemNKPlus.Infrastructure.csproj", "{6081E964-5E20-48D7-A2CB-DB5521541101}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeManagementSystemNKPlus.Infrastructure", "RecipeManagementSystemNKPlus.Infrastructure\RecipeManagementSystemNKPlus.Infrastructure.csproj", "{6081E964-5E20-48D7-A2CB-DB5521541101}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{CB58590E-3560-40AD-B73B-9584F1A12B84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeManagementSystemNKPlus.WebApi", "RecipeManagementSystemNKPlus.WebApi\RecipeManagementSystemNKPlus.WebApi.csproj", "{1CFB7B38-76D0-4486-A491-80B3BDCBD13D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeManagementSystemNKPlus.WebApi", "RecipeManagementSystemNKPlus.WebApi\RecipeManagementSystemNKPlus.WebApi.csproj", "{1CFB7B38-76D0-4486-A491-80B3BDCBD13D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeManagementSystemNKPlus.WebUI", "RecipeManagementSystemNKPlus.WebUI\RecipeManagementSystemNKPlus.WebUI.csproj", "{F2DE701C-6BD5-4C69-84CF-D7F839367258}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RecipeManagementSystemNKPlus.WebUI", "RecipeManagementSystemNKPlus.WebUI\RecipeManagementSystemNKPlus.WebUI.csproj", "{F2DE701C-6BD5-4C69-84CF-D7F839367258}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,106 @@
+﻿@page "/compositetypes"
+
+<h3>Composite Types</h3>
+
+<div class="row g-3 align-items-center">
+    <EditForm Model="_compositeType">
+        <div class="form-group row">
+            <div class="col-auto">
+                <label for="name" class="col-auto col-form-label">
+                    Composite Type Name:
+                </label>
+            </div>
+            <div class="col-4">
+                <div class="col-lg-auto mb-3">
+                    <InputText id="name" class="form-control" @bind-Value="_compositeType.Name" />
+                    <ValidationMessage For="() => _compositeType.Name" />
+                </div>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-success" type="submit" @onclick="async () => await SaveCompositeType()">
+                    <i class="bi bi-check2"></i>
+                    Save
+                </button>
+            </div>   
+        </div>
+    </EditForm>    
+</div>
+
+
+
+<div class="container-fluid">
+    @if (_compositeTypes is null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <div class="row">
+            <table class="table table-bordered text-center justify-content-center">
+                <thead>
+                    <tr>
+                        <th>Composite Type</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var compositeType in _compositeTypes)
+                    {
+                        <tr>
+                            <td>@compositeType.Name</td>
+                            <td>
+                                <div class="d-grid gap-2 d-md-block">
+                                    <button class="btn btn-warning" type="button" @onclick="() => {_compositeType = compositeType; }">
+                                        <i class="bi bi-pencil"></i>
+                                        Edit
+                                    </button>
+                                    <button class="btn btn-danger " type="button" @onclick="async () => await DeleteCompositeType(compositeType)">
+                                        <i class="bi bi-trash"></i>
+                                        Delete
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+
+@code {
+    private List<CompositeType>? _compositeTypes = new();
+    private CompositeType _compositeType = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        _compositeTypes = await CompositeTypeService.GetAllAsync(Constant.CompositeTypeBaseUrl);
+        StateHasChanged();
+    }
+
+    private async Task SaveCompositeType()
+    {
+        if (_compositeType.Id <= 0)
+        {
+            await CompositeTypeService.AddAsync(Constant.CompositeTypeBaseUrl, _compositeType);
+        }
+        else
+        {
+            await CompositeTypeService.UpdateAsync(Constant.CompositeTypeBaseUrl, _compositeType);
+        }
+
+        await LoadData();
+    }
+
+    private async Task DeleteCompositeType(CompositeType compositeType)
+    {
+        var response = await CompositeTypeService.DeleteAsync(Constant.CompositeTypeBaseUrl, compositeType.Id);
+        await LoadData();
+    }
+}

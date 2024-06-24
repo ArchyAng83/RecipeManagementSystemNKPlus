@@ -1,5 +1,6 @@
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Net.Http.Headers;
 using RecipeManagementSystemNKPlus.Application.Interfaces;
 using RecipeManagementSystemNKPlus.Domain.Entities;
 using RecipeManagementSystemNKPlus.Infrastructure.DataAccess;
@@ -28,6 +29,7 @@ namespace RecipeManagementSystemNKPlus.WebApi
 
             builder.Services.AddScoped<IGenericOwnedRepository<CompositeType>, CompositeTypeRepository>();
             builder.Services.AddScoped<IGenericOwnedRepository<Ingredient>, IngredientRepository>();
+            builder.Services.AddScoped<IGenericOwnedRepository<Product>, ProductRepository>();
 
             var app = builder.Build();
 
@@ -36,6 +38,13 @@ namespace RecipeManagementSystemNKPlus.WebApi
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
+                app.UseCors(policy =>
+                {
+                    policy.WithOrigins("https://localhost:7219")
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithHeaders(HeaderNames.ContentType);
+                });
             }
 
             app.UseHttpsRedirection();

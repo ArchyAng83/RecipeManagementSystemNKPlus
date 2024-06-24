@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using RecipeManagementSystemNKPlus.Application.Interfaces;
+using RecipeManagementSystemNKPlus.Application.Services;
+using RecipeManagementSystemNKPlus.Domain.Entities;
 
 namespace RecipeManagementSystemNKPlus.WebUI
 {
@@ -11,7 +14,10 @@ namespace RecipeManagementSystemNKPlus.WebUI
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7224") });
+
+            builder.Services.AddScoped<IGenericOwnedService<CompositeType>, GenericOwnedService<CompositeType>>();
+            builder.Services.AddScoped<IGenericOwnedService<Ingredient>, GenericOwnedService<Ingredient>>();
 
             await builder.Build().RunAsync();
         }

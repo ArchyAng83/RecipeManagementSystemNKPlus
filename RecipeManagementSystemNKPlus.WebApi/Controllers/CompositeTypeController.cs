@@ -37,7 +37,7 @@ namespace RecipeManagementSystemNKPlus.WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCompositeTypeAsync(int id)
         {
             var result = await compositeTypeRepository.DeleteAsync(id);

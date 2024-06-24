@@ -37,7 +37,7 @@ namespace RecipeManagementSystemNKPlus.WebApi.Controllers
             return Ok(result);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteIngredientAsync(int id)
         {
             var result = await ingredientRepository.DeleteAsync(id);
