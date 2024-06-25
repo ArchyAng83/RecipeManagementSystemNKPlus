@@ -18,6 +18,7 @@ namespace RecipeManagementSystemNKPlus.WebUI
 
             builder.Services.AddScoped<IGenericOwnedService<CompositeType>, GenericOwnedService<CompositeType>>();
             builder.Services.AddScoped<IGenericOwnedService<Ingredient>, GenericOwnedService<Ingredient>>();
+            builder.Services.AddScoped<IGenericOwnedService<Product>, GenericOwnedService<Product>>();
 
             await builder.Build().RunAsync();
         }

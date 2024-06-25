@@ -23,12 +23,22 @@ namespace RecipeManagementSystemNKPlus.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<List<Product>> GetAllAsync() => await context.Products.ToListAsync();
+        //public async Task<List<Product>> GetAllAsync() => await context.Products.ToListAsync();
+        public async Task<List<Product>> GetAllAsync() =>
+             await context.Products
+            .Include(i => i.ProductComposites!)
+            .ToListAsync();
 
-        public Task<Product?> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
+
+        //public async Task<Product?> GetByIdAsync(int id) => await context.Products.FindAsync(id);
+        public async Task<Product?> GetByIdAsync(int id) =>
+            await context.Products
+            .Include(i => i.ProductComposites!)
+            .ThenInclude(i => i.Composite)
+            .ThenInclude(i => i!.CompositeType)
+            .ThenInclude(i => i!.Composites!)
+            .ThenInclude(i => i!.Ingredient)
+            .FirstOrDefaultAsync(i => i.Id == id);
 
         public Task<GeneralResponse> UpdateAsync(Product entity)
         {

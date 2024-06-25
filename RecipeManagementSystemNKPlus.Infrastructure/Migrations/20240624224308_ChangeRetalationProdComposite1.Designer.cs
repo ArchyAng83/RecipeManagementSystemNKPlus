@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecipeManagementSystemNKPlus.Infrastructure.DataAccess;
 
@@ -10,9 +11,11 @@ using RecipeManagementSystemNKPlus.Infrastructure.DataAccess;
 namespace RecipeManagementSystemNKPlus.Infrastructure.Migrations
 {
     [DbContext(typeof(RecipeDbContext))]
-    partial class RecipeDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240624224308_ChangeRetalationProdComposite1")]
+    partial class ChangeRetalationProdComposite1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,7 +47,7 @@ namespace RecipeManagementSystemNKPlus.Infrastructure.Migrations
 
                     b.HasIndex("IngredientId");
 
-                    b.ToTable("Composites", (string)null);
+                    b.ToTable("Composites");
                 });
 
             modelBuilder.Entity("RecipeManagementSystemNKPlus.Domain.Entities.CompositeType", b =>
@@ -61,7 +64,7 @@ namespace RecipeManagementSystemNKPlus.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CompositeTypes", (string)null);
+                    b.ToTable("CompositeTypes");
                 });
 
             modelBuilder.Entity("RecipeManagementSystemNKPlus.Domain.Entities.Ingredient", b =>
@@ -78,7 +81,7 @@ namespace RecipeManagementSystemNKPlus.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingredients", (string)null);
+                    b.ToTable("Ingredients");
                 });
 
             modelBuilder.Entity("RecipeManagementSystemNKPlus.Domain.Entities.Product", b =>
@@ -105,7 +108,7 @@ namespace RecipeManagementSystemNKPlus.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("RecipeManagementSystemNKPlus.Domain.Entities.ProductComposite", b =>
@@ -120,7 +123,7 @@ namespace RecipeManagementSystemNKPlus.Infrastructure.Migrations
 
                     b.HasIndex("CompositeId");
 
-                    b.ToTable("ProductComposite", (string)null);
+                    b.ToTable("ProductComposite");
                 });
 
             modelBuilder.Entity("RecipeManagementSystemNKPlus.Domain.Entities.Composite", b =>

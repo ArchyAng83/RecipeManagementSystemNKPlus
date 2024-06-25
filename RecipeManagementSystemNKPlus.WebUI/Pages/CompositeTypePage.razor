@@ -17,7 +17,7 @@
                 </div>
             </div>
             <div class="col-auto">
-                <button class="btn btn-success" type="submit" @onclick="async () => await SaveCompositeType()">
+                <button class="btn btn-success" type="submit" @onclick="async () => await SaveCompositeTypeAsync()">
                     <i class="bi bi-check2"></i>
                     Save
                 </button>
@@ -54,7 +54,7 @@
                                         <i class="bi bi-pencil"></i>
                                         Edit
                                     </button>
-                                    <button class="btn btn-danger " type="button" @onclick="async () => await DeleteCompositeType(compositeType)">
+                                    <button class="btn btn-danger " type="button" @onclick="async () => await DeleteCompositeTypeAsync(compositeType)">
                                         <i class="bi bi-trash"></i>
                                         Delete
                                     </button>
@@ -75,16 +75,16 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadData();
+        await LoadDataAsync();
     }
 
-    private async Task LoadData()
+    private async Task LoadDataAsync()
     {
         _compositeTypes = await CompositeTypeService.GetAllAsync(Constant.CompositeTypeBaseUrl);
         StateHasChanged();
     }
 
-    private async Task SaveCompositeType()
+    private async Task SaveCompositeTypeAsync()
     {
         if (_compositeType.Id <= 0)
         {
@@ -95,12 +95,12 @@
             await CompositeTypeService.UpdateAsync(Constant.CompositeTypeBaseUrl, _compositeType);
         }
 
-        await LoadData();
+        await LoadDataAsync();
     }
 
-    private async Task DeleteCompositeType(CompositeType compositeType)
+    private async Task DeleteCompositeTypeAsync(CompositeType compositeType)
     {
         var response = await CompositeTypeService.DeleteAsync(Constant.CompositeTypeBaseUrl, compositeType.Id);
-        await LoadData();
+        await LoadDataAsync();
     }
 }

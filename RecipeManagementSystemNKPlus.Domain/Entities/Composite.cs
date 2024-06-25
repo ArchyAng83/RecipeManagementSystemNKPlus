@@ -19,5 +19,9 @@ namespace RecipeManagementSystemNKPlus.Domain.Entities
         public int IngredientId { get; set; }
 
         public Ingredient Ingredient { get; set; }
+
+        public List<Product>? Products { get; set; }
+
+        public List<ProductComposite> ProductComposites { get; set; }
     }
 }

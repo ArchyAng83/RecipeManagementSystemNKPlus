@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServiceStack.DataAnnotations;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace RecipeManagementSystemNKPlus.Domain.Entities
     {
         public int Id { get; set; }
 
+        [Unique]
         public string Name { get; set; }
 
         public int Quantity { get; set; }
@@ -19,7 +21,9 @@ namespace RecipeManagementSystemNKPlus.Domain.Entities
 
         public string Description { get; set; } = string.Empty;
 
-        [JsonIgnore]
-        public List<ProductCompositeType>? ProductCompositeTypes { get; set; }
+        public List<Composite>? Composites { get; set; }
+
+        //[JsonIgnore]
+        public List<ProductComposite>? ProductComposites { get; set; } = new();
     }
 }

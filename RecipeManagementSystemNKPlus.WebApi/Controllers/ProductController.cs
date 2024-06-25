@@ -15,5 +15,12 @@ namespace RecipeManagementSystemNKPlus.WebApi.Controllers
             var results = await productRepository.GetAllAsync();
             return Ok(results);
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetProductByIdAsync(int id)
+        {
+            var result = await productRepository.GetByIdAsync(id);
+            return Ok(result);
+        }
     }
 }
