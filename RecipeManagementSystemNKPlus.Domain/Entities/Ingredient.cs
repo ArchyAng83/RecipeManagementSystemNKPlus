@@ -17,6 +17,7 @@ namespace RecipeManagementSystemNKPlus.Domain.Entities
         [Required]
         public string Name { get; set; }
 
+        [JsonIgnore]
         public List<CompositeType>? CompositeTypes { get; set; }
 
         [JsonIgnore]

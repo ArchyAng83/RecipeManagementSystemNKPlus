@@ -19,24 +19,22 @@ namespace RecipeManagementSystemNKPlus.Infrastructure.DataAccess
         public DbSet<CompositeType> CompositeTypes { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Product> Products { get; set; }
-        public DbSet<ProductComposite> ProductComposite { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder
-            .Entity<Product>()
-            .HasMany(c => c.Composites)
-            .WithMany(s => s.Products)
-            .UsingEntity<ProductComposite>(
-               j => j
-                .HasOne(pt => pt.Composite)
-                .WithMany(t => t.ProductComposites)
-                .HasForeignKey(pt => pt.CompositeId),
-            j => j
-                .HasOne(pt => pt.Product)
-                .WithMany(p => p.ProductComposites)
-                .HasForeignKey(pt => pt.ProductId),
-            j => j.HasKey(t => new { t.ProductId, t.CompositeId }));
+            modelBuilder.Entity<Product>()
+                .HasMany(ct => ct.CompositeTypes)
+                .WithMany(p => p.Products)
+                .UsingEntity<Composite>(
+                    j => j
+                    .HasOne(ct => ct.CompositeType)
+                    .WithMany(c => c.Composites)
+                    .HasForeignKey(ct => ct.CompositeTypeId),
+                    j => j
+                    .HasOne(p => p.Product)
+                    .WithMany(c => c.Composites)
+                    .HasForeignKey(p => p.ProductId)
+                );
 
             modelBuilder
             .Entity<CompositeType>()
@@ -50,8 +48,11 @@ namespace RecipeManagementSystemNKPlus.Infrastructure.DataAccess
             j => j
                 .HasOne(pt => pt.CompositeType)
                 .WithMany(p => p.Composites)
-                .HasForeignKey(pt => pt.CompositeTypeId),
-            j => j.HasKey(t => t.Id));
+                .HasForeignKey(pt => pt.CompositeTypeId));
+
+            modelBuilder
+                .Entity<Composite>()
+                .HasKey(k => new {k.ProductId, k.CompositeTypeId, k.IngredientId});
         }
     }
 }

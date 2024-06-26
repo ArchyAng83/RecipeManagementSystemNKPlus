@@ -21,9 +21,9 @@ namespace RecipeManagementSystemNKPlus.Domain.Entities
 
         public string Description { get; set; } = string.Empty;
 
-        public List<Composite>? Composites { get; set; }
+        public List<CompositeType>? CompositeTypes { get; set; }
 
-        //[JsonIgnore]
-        public List<ProductComposite>? ProductComposites { get; set; } = new();
+        [JsonIgnore]
+        public List<Composite>? Composites { get; set; }
     }
 }

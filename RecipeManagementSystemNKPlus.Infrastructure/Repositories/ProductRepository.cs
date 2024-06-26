@@ -23,22 +23,30 @@ namespace RecipeManagementSystemNKPlus.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        //public async Task<List<Product>> GetAllAsync() => await context.Products.ToListAsync();
-        public async Task<List<Product>> GetAllAsync() =>
-             await context.Products
-            .Include(i => i.ProductComposites!)
-            .ToListAsync();
+        public async Task<List<Product>> GetAllAsync() => await context.Products.ToListAsync();
 
-
-        //public async Task<Product?> GetByIdAsync(int id) => await context.Products.FindAsync(id);
         public async Task<Product?> GetByIdAsync(int id) =>
             await context.Products
-            .Include(i => i.ProductComposites!)
-            .ThenInclude(i => i.Composite)
-            .ThenInclude(i => i!.CompositeType)
-            .ThenInclude(i => i!.Composites!)
-            .ThenInclude(i => i!.Ingredient)
+            .Include(p => p.Composites)
+            .ThenInclude(c => c.CompositeType)
+            .Include(p => p.Composites)
+            .ThenInclude(c => c.Ingredient)
+            .Where(p => p.Composites.Any())
             .FirstOrDefaultAsync(i => i.Id == id);
+
+        //var query = from c in context.Composites
+        //join p in context.Products on c.ProductId equals p.Id
+        //join ct in context.CompositeTypes on c.CompositeTypeId equals ct.Id
+        //join i in context.Ingredients on c.IngredientId equals i.Id
+        //select new
+        //{
+        //    ProductId = c.ProductId,
+        //    ProductName = p.Name,
+        //    CompositeTypeName = ct.Name,
+        //    IngredientName = i.Name,
+        //    Weight = c.Weight
+        //};
+
 
         public Task<GeneralResponse> UpdateAsync(Product entity)
         {

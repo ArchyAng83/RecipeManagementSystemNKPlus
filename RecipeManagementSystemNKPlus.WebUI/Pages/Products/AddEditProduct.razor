@@ -64,6 +64,19 @@
             Save
         </button>
     </div>
+    <div>
+        @foreach (var comp in _product!.CompositeTypes!)
+        {
+            <p>@comp.Name</p>
+            <ul>
+                @foreach (var ing in comp.Ingredients!)
+                {
+                    <li>@ing.Name</li>
+                }
+            </ul>
+           
+        }
+    </div>
 </div>
 
 @code {

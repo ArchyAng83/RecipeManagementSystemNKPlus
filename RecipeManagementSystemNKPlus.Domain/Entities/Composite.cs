@@ -2,15 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace RecipeManagementSystemNKPlus.Domain.Entities
 {
     public class Composite
-    {
-        public int Id { get; set; }
+    {    
+        public int ProductId { get; set; }
 
-        public double Weight { get; set; }
+        public Product Product { get; set; }
 
         public int CompositeTypeId { get; set; }
 
@@ -20,8 +21,6 @@ namespace RecipeManagementSystemNKPlus.Domain.Entities
 
         public Ingredient Ingredient { get; set; }
 
-        public List<Product>? Products { get; set; }
-
-        public List<ProductComposite> ProductComposites { get; set; }
+        public double Weight { get; set; }
     }
 }
