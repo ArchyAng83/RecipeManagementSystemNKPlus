@@ -44,9 +44,10 @@ namespace RecipeManagementSystemNKPlus.Infrastructure.Repositories
             return GetNotFound();
         }        
 
-        public async Task<List<CompositeType>> GetAllAsync() => await context.CompositeTypes.Include(i => i.Ingredients).ToListAsync();
+        public async Task<List<CompositeType>> GetAllAsync() => await context.CompositeTypes.ToListAsync();
 
-        public async Task<CompositeType?> GetByIdAsync(int id) => await context.CompositeTypes.FindAsync(id);
+        public async Task<CompositeType?> GetByIdAsync(int id) => 
+            await context.CompositeTypes.Include(i => i.Ingredients).FirstOrDefaultAsync(i => i.Id == id);
 
         public async Task<GeneralResponse> UpdateAsync(CompositeType entity)
         {

@@ -16,12 +16,12 @@
                     <InputText id="name" class="form-control" @bind-Value="_product!.Name" />
                     <ValidationMessage For="() => _product.Name" />
                 </div>
-            </div>            
+            </div>
         </div>
         <div class="form-group row">
             <div class="col-2">
                 <label for="quantity" class="col-auto col-form-label">
-                    Quntity:
+                    Quantity:
                 </label>
             </div>
             <div class="col-4">
@@ -34,7 +34,7 @@
         <div class="form-group row">
             <div class="col-2">
                 <label for="weight" class="col-auto col-form-label">
-                    Ingredient Name:
+                    Weight:
                 </label>
             </div>
             <div class="col-4">
@@ -47,36 +47,24 @@
         <div class="form-group row">
             <div class="col-2">
                 <label for="description" class="col-auto col-form-label">
-                    Ingredient Name:
+                    Description:
                 </label>
             </div>
             <div class="col-4">
                 <div class="col-lg-auto mb-3">
                     <InputTextArea id="description" class="form-control" @bind-Value="_product.Description" />
-                    <ValidationMessage For="() => _product.Weight" />
+                    <ValidationMessage For="() => _product.Description" />
                 </div>
             </div>
         </div>
+        <div class="col-auto">
+            <button class="btn btn-success" type="submit">
+                <i class="bi bi-check2"></i>
+                Save
+            </button>
+        </div>
     </EditForm>
-    <div class="col-auto">
-        <button class="btn btn-success" type="submit">
-            <i class="bi bi-check2"></i>
-            Save
-        </button>
-    </div>
-    <div>
-        @foreach (var comp in _product!.CompositeTypes!)
-        {
-            <p>@comp.Name</p>
-            <ul>
-                @foreach (var ing in comp.Ingredients!)
-                {
-                    <li>@ing.Name</li>
-                }
-            </ul>
-           
-        }
-    </div>
+    
 </div>
 
 @code {
@@ -86,11 +74,11 @@
     private Product? _product = new();
 
     protected override async Task OnInitializedAsync()
-    {        
+    {    
         if (Id != 0)
         {
             _product = await ProductService.GetByIdAsync(Constant.ProductBaseUrl, Id);
-        }        
+        }
     }
 
     private async Task SaveProductAsync()
@@ -106,5 +94,4 @@
 
         NavManager.NavigateTo("/products");
     }
-
 }

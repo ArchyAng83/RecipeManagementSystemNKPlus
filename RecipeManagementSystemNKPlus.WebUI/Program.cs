@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using RecipeManagementSystemNKPlus.Application.DTOs;
 using RecipeManagementSystemNKPlus.Application.Interfaces;
 using RecipeManagementSystemNKPlus.Application.Services;
 using RecipeManagementSystemNKPlus.Domain.Entities;
@@ -19,6 +20,7 @@ namespace RecipeManagementSystemNKPlus.WebUI
             builder.Services.AddScoped<IGenericOwnedService<CompositeType>, GenericOwnedService<CompositeType>>();
             builder.Services.AddScoped<IGenericOwnedService<Ingredient>, GenericOwnedService<Ingredient>>();
             builder.Services.AddScoped<IGenericOwnedService<Product>, GenericOwnedService<Product>>();
+            builder.Services.AddScoped<IGenericOwnedService<ProductDto>, GenericOwnedService<ProductDto>>();
 
             await builder.Build().RunAsync();
         }

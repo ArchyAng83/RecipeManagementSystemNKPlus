@@ -11,15 +11,18 @@ namespace RecipeManagementSystemNKPlus.Domain.Entities
     {    
         public int ProductId { get; set; }
 
-        public Product Product { get; set; }
+        [JsonIgnore]
+        public Product? Product { get; set; } 
 
         public int CompositeTypeId { get; set; }
 
-        public CompositeType CompositeType { get; set; }
+        [JsonIgnore]
+        public CompositeType? CompositeType { get; set; }
 
         public int IngredientId { get; set; }
 
-        public Ingredient Ingredient { get; set; }
+        [JsonIgnore]
+        public Ingredient? Ingredient { get; set; } 
 
         public double Weight { get; set; }
     }

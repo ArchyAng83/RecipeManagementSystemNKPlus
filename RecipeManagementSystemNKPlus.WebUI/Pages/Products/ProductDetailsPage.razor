@@ -1,0 +1,133 @@
+﻿
+@page "/product/details/{id:int}"
+
+<h3>Product</h3>
+
+<div class="row g-3 align-items-center">
+    <div class="container" >
+        <div class="form-group row">
+            <div class="col-2">
+                <label for="name" class="col-auto col-form-label">
+                    Product Name: @_product!.Name
+                </label>
+            </div>            
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label for="quantity" class="col-auto col-form-label">
+                    Quantity: @_product.Quantity
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label for="weight" class="col-auto col-form-label">
+                    Weight: @_product.Weight
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label for="description" class="col-auto col-form-label">
+                    Description:
+                </label>
+                <p>@_product.Description</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-auto">
+        <a class="btn btn-primary" role="button" href="/products">
+            <i class="bi bi-arrow-bar-left"></i>
+            Back
+        </a>
+    </div>
+    <div class="row mt-2">
+        @foreach (var comp in _product!.CompositeTypes!)
+        {
+            <div class="col-auto">
+                <div class="fw-bold">@comp.Name</div>
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-warning" @onclick="() => AddIngredientsToCompositeType(_product.Id, comp.Id)">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+                    <div class="btn-group btn-group-sm">
+                        <button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown" role="group" aria-expanded="false">
+                            <i class="bi bi-plus"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                            @foreach (var ct in _compositeTypes!)
+                            {
+                                <div class="btn dropdown-item" @onclick="() => AddCompositeTypeToProduct(ct)">@ct.Name</div>
+                            }
+                        </div>
+                    </div>
+
+                    <button class="btn btn-danger" @onclick="() => DeleteCompositeTypeFromProduct(comp)">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+                <ul>
+                    @foreach (var ing in comp.Ingredients!)
+                    {
+                        <li>
+                            @ing.Name
+                            <ul>
+                                @foreach (var composite in ing.Composites!.Where(c => c.CompositeTypeId == comp.Id))
+                                {
+                                    @* @if (composite.CompositeTypeId == comp.Id)
+                        {
+                        <li>@composite.Weight</li>
+                        }
+                        else
+                        {
+                        <li>-----</li>
+                        } *@
+
+                                    <li>@composite.Weight</li>
+                                }
+                            </ul>
+                        </li>
+                    }
+                </ul>
+
+            </div>
+
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    private Product? _product = new();
+    private List<CompositeType>? _compositeTypes = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _compositeTypes = await CompositeTypeService.GetAllAsync(Constant.CompositeTypeBaseUrl);
+        _product = await ProductService.GetByIdAsync(Constant.ProductBaseUrl, Id);
+
+        if (_product!.CompositeTypes!.Count == 0)
+        {
+            _product.CompositeTypes.Add(_compositeTypes!.First());
+        }
+    }
+
+    private void AddCompositeTypeToProduct(CompositeType compositeType)
+    {
+        if (!_product!.CompositeTypes!.Any(i => i.Id == compositeType.Id))
+            _product!.CompositeTypes!.Add(compositeType);
+    }
+
+    private void DeleteCompositeTypeFromProduct(CompositeType compositeType)
+    {
+        if (_product!.CompositeTypes!.Count > 1)
+        {
+            _product!.CompositeTypes!.Remove(compositeType);
+        }
+    }
+
+    private void AddIngredientsToCompositeType(int prodId, int ctId) =>
+        NavManager.NavigateTo($"/product/addingredients/{prodId}/{ctId}");
+}

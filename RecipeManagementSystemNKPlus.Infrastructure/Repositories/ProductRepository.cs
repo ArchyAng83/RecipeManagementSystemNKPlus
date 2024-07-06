@@ -3,35 +3,51 @@ using RecipeManagementSystemNKPlus.Application.DTOs;
 using RecipeManagementSystemNKPlus.Application.Interfaces;
 using RecipeManagementSystemNKPlus.Domain.Entities;
 using RecipeManagementSystemNKPlus.Infrastructure.DataAccess;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RecipeManagementSystemNKPlus.Infrastructure.Repositories
 {
     public class ProductRepository(RecipeDbContext context) : IGenericOwnedRepository<Product>
     {
-        public Task<GeneralResponse> AddAsync(Product entity)
+        public async Task<GeneralResponse> AddAsync(Product entity)
         {
-            throw new NotImplementedException();
+            if (entity is not null)
+            {
+                if (!CheckName(entity.Name))
+                {
+                    return new GeneralResponse(false, "Already exist.");
+                }
+
+                context.Products.Add(entity);                
+                
+                await context.SaveChangesAsync();
+                return SaveSuccess();
+            }
+
+            return GetNotFound();
         }
 
-        public Task<GeneralResponse> DeleteAsync(int id)
+        public async Task<GeneralResponse> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var entity = await GetByIdAsync(id);
+
+            if (entity is not null)
+            {
+                context.Products.Remove(entity);
+                await context.SaveChangesAsync();
+                return new GeneralResponse(true, "Product deleted successfully!");
+            }
+
+            return GetNotFound();
         }
 
         public async Task<List<Product>> GetAllAsync() => await context.Products.ToListAsync();
 
         public async Task<Product?> GetByIdAsync(int id) =>
             await context.Products
-            .Include(p => p.Composites)
+            .Include(p => p.Composites!)
             .ThenInclude(c => c.CompositeType)
-            .Include(p => p.Composites)
+            .Include(p => p.Composites!)
             .ThenInclude(c => c.Ingredient)
-            .Where(p => p.Composites.Any())
             .FirstOrDefaultAsync(i => i.Id == id);
 
         //var query = from c in context.Composites
@@ -48,9 +64,28 @@ namespace RecipeManagementSystemNKPlus.Infrastructure.Repositories
         //};
 
 
-        public Task<GeneralResponse> UpdateAsync(Product entity)
+        public async Task<GeneralResponse> UpdateAsync(Product entity)
         {
-            throw new NotImplementedException();
+            if (entity is not null)
+            {
+                context.Products.Update(entity);
+                //context.Composites.UpdateRange(entity.Composites!);
+
+                await context.SaveChangesAsync();
+                return SaveSuccess();
+            }
+
+            return GetNotFound();
+        }
+
+        private static GeneralResponse GetNotFound() => new(false, "Product not found.");
+        private static GeneralResponse SaveSuccess() => new(true, "Product saved successfully!");
+
+        private bool CheckName(string name)
+        {
+            var prod = context.Products.Where(c => c.Name.ToLower().Equals(name.ToLower())).FirstOrDefault();
+
+            return prod is null;
         }
     }
 }

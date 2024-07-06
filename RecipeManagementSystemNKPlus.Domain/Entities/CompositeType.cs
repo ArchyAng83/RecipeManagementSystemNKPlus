@@ -15,7 +15,7 @@ namespace RecipeManagementSystemNKPlus.Domain.Entities
         [Unique]
         public string Name { get; set; }
 
-        public List<Ingredient>? Ingredients { get; set; }
+        public List<Ingredient>? Ingredients { get; set; } = new();
 
         [JsonIgnore]
         public List<Product>? Products { get; set; } 

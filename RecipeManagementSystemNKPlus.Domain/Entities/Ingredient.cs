@@ -20,7 +20,7 @@ namespace RecipeManagementSystemNKPlus.Domain.Entities
         [JsonIgnore]
         public List<CompositeType>? CompositeTypes { get; set; }
 
-        [JsonIgnore]
-        public List<Composite>? Composites { get; set; }
+        //[JsonIgnore]
+        public List<Composite>? Composites { get; set; } = new();
     }
 }

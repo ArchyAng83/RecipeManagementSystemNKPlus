@@ -1,0 +1,125 @@
+﻿@page "/product/addingredients/{prod?}/{ctId:int}"
+
+<h3>@message</h3>
+
+<div class="row g-3 align-items-center">
+    <EditForm Model="_ingredient">
+        <div class="form-group row">
+            <div class="col-auto">
+                <label for="name" class="col-auto col-form-label">
+                    Ingredient Name:
+                </label>
+            </div>
+            <div class="col-4">
+                <div class="col-lg-auto mb-3">
+                    <InputSelect id="name" class="form-control" @bind-Value="_ingredient!.Id">
+                        @foreach (var ing in _ingredients!)
+                        {
+                            <option value="@ing.Id">@ing.Name</option>
+                        }
+                    </InputSelect>
+                </div>
+            </div>
+            <div class="col-auto">
+                <label for="weight" class="col-auto col-form-label">
+                    Weight:
+                </label>
+            </div>
+            <div class="col-2">
+                <div class="col-lg-auto mb-3">
+                    <InputNumber id="weight" class="form-control" @bind-Value="ingWeight" />
+                </div>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-success" type="submit" @onclick="() => AddToCompositeType()">
+                    <i class="bi bi-plus"></i>
+                </button>
+            </div>
+        </div>
+    </EditForm>
+</div>
+
+<div class="row">
+    <table class="table table-bordered text-center justify-content-center">
+        <thead>
+            <tr>
+                <th>Ingredient</th>
+                <th>Weight</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ingredient in _compositeType!.Ingredients!)
+            {
+                <tr>
+                    <td>@ingredient.Name</td>
+                    <td>@ingredient.Composites!.Where(c => c.CompositeTypeId == _compositeType.Id).First().Weight</td>
+                    <td>
+                        <button class="btn btn-danger " type="button" @onclick="() => DeleteFromCompositeType(ingredient)">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter]
+    public int CtId { get; set; }
+
+    [Parameter]
+    public Product? Prod { get; set; }
+
+    private CompositeType? _compositeType = new();
+
+    private Ingredient? _ingredient = new();
+
+    private List<Ingredient>? _ingredients = new();
+
+    private double ingWeight = 0;
+
+    private string message = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        _ingredients = await IngredientService.GetAllAsync(Constant.IngredientBaseUrl);
+
+        _compositeType = Prod!.CompositeTypes!.Where(ct => ct.Id == CtId).FirstOrDefault();
+
+        if (_compositeType is null)
+        {
+            var compositeTypes = await CompositeTypeService.GetAllAsync(Constant.CompositeTypeBaseUrl);
+            _compositeType = compositeTypes!.FirstOrDefault();
+            Prod.CompositeTypes!.Add(_compositeType!);
+        }
+
+        message = $"{Prod.Name} {_compositeType!.Name}";
+    }
+
+    private void DeleteFromCompositeType(Ingredient ingredient)
+    {
+        _compositeType!.Ingredients!.Remove(ingredient);
+    }
+
+    private async Task AddToCompositeType()
+    {
+        var ing = await IngredientService.GetByIdAsync(Constant.IngredientBaseUrl, _ingredient!.Id);
+
+        if (!_compositeType!.Ingredients!.Any(i => i.Id == ing!.Id))
+        {
+            _ingredient.Name = ing!.Name;
+            _ingredient.Composites!.Add(new Composite
+                {
+                    ProductId = Prod!.Id,
+                    CompositeTypeId = _compositeType.Id,
+                    IngredientId = _ingredient.Id,
+                    Weight = ingWeight
+                });
+
+            _compositeType!.Ingredients!.Add(_ingredient!);
+        }
+
+    }
+}

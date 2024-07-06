@@ -12,9 +12,11 @@
 @using RecipeManagementSystemNKPlus.Domain.Entities
 @using RecipeManagementSystemNKPlus.Application.Interfaces
 @using RecipeManagementSystemNKPlus.Domain.Constants
+@using RecipeManagementSystemNKPlus.Application.DTOs
 
 @inject IGenericOwnedService<CompositeType> CompositeTypeService
 @inject IGenericOwnedService<Ingredient> IngredientService
 @inject IGenericOwnedService<Product> ProductService
+@inject IGenericOwnedService<ProductDto> ProductDtoService
 
 @inject NavigationManager NavManager

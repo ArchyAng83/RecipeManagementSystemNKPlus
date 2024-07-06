@@ -1,14 +1,14 @@
-﻿using ServiceStack.DataAnnotations;
+﻿using RecipeManagementSystemNKPlus.Domain.Entities;
+using ServiceStack.DataAnnotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace RecipeManagementSystemNKPlus.Domain.Entities
+namespace RecipeManagementSystemNKPlus.Application.DTOs
 {
-    public class Product
+    public class ProductDto
     {
         public int Id { get; set; }
 
@@ -21,10 +21,6 @@ namespace RecipeManagementSystemNKPlus.Domain.Entities
 
         public string Description { get; set; } = string.Empty;
 
-        
-        public List<CompositeType>? CompositeTypes { get; set; } = new();
-
-        //[JsonIgnore]
-        public List<Composite>? Composites { get; set; } = new();
+        public List<CompositeDto>? Composites { get; set; } = new();
     }
 }
