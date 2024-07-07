@@ -1,0 +1,97 @@
+﻿@page "/calculation/results/{prodId:int}/{ctId:int}/start={startqty:int}/end={endqty:int}/step={step:int}"
+@using RecipeManagementSystemNKPlus.Application.Calculations
+
+<h3>@_product!.Name</h3>
+<h3>@_compositeType!.Name</h3>
+
+@* <div class="row">
+    <table class="table table-bordered text-center justify-content-center">
+        <thead>
+            <tr>
+                <th>Ingredients</th>
+                
+                @foreach (var comp in _compositeDtos)
+                {
+                    <th>@comp.Qty</th>                    
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var comp in _compositeDtos)
+            {
+                <tr>
+                    @foreach (var ingredient in comp.Ingredients)
+                    {
+                        <td></td>
+                        <td>@ingredient.Weight</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>  *@
+
+<div class="container text-center">
+    <div class="row mt-2">
+        <div class="col-2">
+            <ul class="list-group">
+                <li class="list-group-item fw-bold">Ingredients</li>
+                @foreach (var ing in _ingredients)
+                {
+                    <li class="list-group-item">
+                        @ing.Name
+                    </li>
+                }
+            </ul>
+        </div>
+        @foreach (var comp in _compositeDtos)
+        {
+            <div class="col-auto">
+                <ul class="list-group">
+                    <li class="list-group-item fw-bold">@comp.Qty</li>
+                    @foreach (var ing in comp.Ingredients!)
+                    {
+                        <li class="list-group-item">
+                            @ing.Weight.ToString("f3")
+                        </li>
+                    }
+                </ul>
+
+            </div>
+        }
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public int ProdId { get; set; }
+
+    [Parameter]
+    public int CtId { get; set; }
+
+    [Parameter]
+    public int StartQty { get; set; } = 1;
+
+    [Parameter]
+    public int EndQty { get; set; } = 1;
+
+    [Parameter]
+    public int Step { get; set; } = 1;
+
+    private Product? _product = new();
+
+    private CompositeType? _compositeType = new();
+
+    private List<CompositeTypeDto> _compositeDtos = new();
+
+    private List<IngredientDto> _ingredients = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _product = await ProductService.GetByIdAsync(Constant.ProductBaseUrl, ProdId);
+        _compositeType = _product!.CompositeTypes!.Find(ct => ct.Id == CtId);
+        _compositeDtos = Calculation.GetResult(_compositeType!, _product.Quantity, StartQty, EndQty, Step);
+        _ingredients = _compositeDtos.FirstOrDefault()!.Ingredients;
+    }
+}

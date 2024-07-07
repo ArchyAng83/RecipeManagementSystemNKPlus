@@ -1,0 +1,131 @@
+﻿@page "/calculation/{prodId:int}"
+
+<h3>CalculationPage</h3>
+
+<div class="row g-3 align-items-center">
+    <div class="container">
+        <div class="form-group row">
+            <div class="col-2">
+                <label for="name" class="col-auto col-form-label">
+                    Product Name: @_product!.Name
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label for="quantity" class="col-auto col-form-label">
+                    Quantity: @_product.Quantity
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-2">
+                <label for="weight" class="col-auto col-form-label">
+                    Weight: @_product.Weight
+                </label>
+            </div>
+        </div>        
+    </div>
+    <div class="row g-3 align-items-center">
+        <EditForm Model="_product">
+            <div class="form-group row">
+                <div class="col-2 mb-3">
+                    <label for="start" class="col-form-label">
+                        Start:
+                    </label>
+                    <div>
+                        <InputNumber id="start" class="form-control" @bind-Value="@startQuantity" />
+                    </div>
+                </div>
+                <div class="col-2">
+                    <label for="end" class="col-form-label">
+                        End:
+                    </label>
+                    <div>
+                        <InputNumber id="start" class="form-control" @bind-Value="@endQuantity" />
+                    </div>
+                </div>
+                <div class="col-2">
+                    <label for="step" class="col-form-label">
+                        Step:
+                    </label>
+                    <div>
+                        <InputNumber id="step" class="form-control" @bind-Value="@step" />
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-2">
+                <button class="btn btn-success" type="submit" @onclick="() => Calculate()">
+                    <i class="bi bi-check2"></i>
+                    Calculate
+                </button>
+                <a class="btn btn-primary" role="button" href="/">
+                    <i class="bi bi-arrow-bar-left"></i>
+                    Back
+                </a>
+            </div>
+        </EditForm>        
+    </div>
+    
+    <div class="row mt-2">
+        @foreach (var comp in _product!.CompositeTypes!)
+        {
+            <div class="col-auto">
+                <div class="fw-bold">
+                    @comp.Name
+                </div>
+                <div class="text-center">
+                    <input class="form-check-input " type="radio" name="flexRadioDefault" id="flexRadioDefault1" 
+                    checked="@(CtId == comp.Id)"
+                    @onchange="@(() => CtId = comp.Id)"/>
+                </div>
+                @foreach (var ing in comp.Ingredients!)
+                {
+                    @* <li>
+            @ing.Name
+            <ul>
+            @foreach (var composite in ing.Composites!.Where(c => c.CompositeTypeId == comp.Id))
+            {
+            <li>@composite.Weight</li>
+            }
+            </ul>
+            </li> *@
+                   
+                    <div class="col-2 align-content-center">
+                        <span class="fw-bold">@ing.Name</span>
+                        @ing.Composites!.Where(c => c.CompositeTypeId == comp.Id).Select(x => x.Weight).First()
+                    </div>
+                }
+
+            </div>
+
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int ProdId { get; set; }
+
+    private int CtId;
+    private int startQuantity = 0;
+    private int endQuantity = 0;
+    private int step = 0;
+    private Product? _product = new();
+    private List<CompositeType>? _compositeTypes = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _compositeTypes = await CompositeTypeService.GetAllAsync(Constant.CompositeTypeBaseUrl);
+        _product = await ProductService.GetByIdAsync(Constant.ProductBaseUrl, ProdId);
+    }
+
+    private void Calculate()
+    {
+
+        NavManager.NavigateTo($"/calculation/results/{ProdId}/{CtId}/start={startQuantity}/end={endQuantity}/step={step}");
+    }
+
+    
+}

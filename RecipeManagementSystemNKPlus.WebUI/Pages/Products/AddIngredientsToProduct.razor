@@ -112,7 +112,7 @@
     {
         _compositeType!.Ingredients!.Remove(ingredient);
 
-        var composite = _product!.Composites!.Where(c => c.CompositeTypeId == _compositeType.Id && c.IngredientId == ingredient.Id).FirstOrDefault();
+        var composite = _product!.Composites!.Where(c => c.CompositeTypeId == CtId && c.IngredientId == ingredient.Id).FirstOrDefault();
 
         _product.Composites!.Remove(composite!);
     }
@@ -142,6 +142,9 @@
 
     private async Task SaveProductAsync()
     {
+        if (_product!.Composites!.Count <= 0)
+            return;
+
         var newProduct = new ProductDto
             {
                 Id = _product!.Id,
@@ -159,8 +162,7 @@
             };
 
 
-        var response = await ProductDtoService.UpdateAsync($"api/product/addcomposite", newProduct);
-        message = response.Message;
+        var response = await ProductDtoService.UpdateAsync($"{Constant.ProductBaseUrl}/addcomposite", newProduct);
 
         NavManager.NavigateTo($"/product/details/{_product!.Id}");
     }

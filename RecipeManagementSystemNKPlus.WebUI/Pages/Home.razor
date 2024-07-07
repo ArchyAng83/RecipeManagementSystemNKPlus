@@ -1,7 +1,64 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<h3>Calculation</h3>
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<div class="container-fluid">
+    @if (_products is null)
+    {
+        <p>Loading...</p>
+    }
+    else
+    {
+        <div class="row">
+            <table class="table table-bordered text-center justify-content-center">
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Quantity</th>
+                        <th>Weight</th>
+                        <th>Description</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var product in _products)
+                    {
+                        <tr>
+                            <td>@product.Name</td>
+                            <td>@product.Quantity</td>
+                            <td>@product.Weight</td>
+                            <td>@product.Description</td>
+                            <td>
+                                <div class="d-grid gap-2 d-md-block">
+                                    <button class="btn btn-primary fs-5" type="button" @onclick="() => CalcProduct(product)">
+                                        <i class="bi bi-list-ol"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+
+@code {
+    private List<Product>? _products = new();
+    private Product _product = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        _products = await ProductService.GetAllAsync(Constant.ProductBaseUrl);
+        StateHasChanged();
+    }
+
+    private void CalcProduct(Product product) => NavManager.NavigateTo($"/calculation/{product.Id}");
+}
