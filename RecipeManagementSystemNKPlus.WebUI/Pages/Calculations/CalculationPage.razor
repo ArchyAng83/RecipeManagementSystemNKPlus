@@ -108,7 +108,7 @@
     [Parameter]
     public int ProdId { get; set; }
 
-    private int CtId;
+    private int CtId = 1;
     private int startQuantity = 0;
     private int endQuantity = 0;
     private int step = 0;
@@ -123,7 +123,8 @@
 
     private void Calculate()
     {
-
+        if (CtId <= 0 || startQuantity <= 0 || endQuantity <= 0 || step <= 0)
+            return;
         NavManager.NavigateTo($"/calculation/results/{ProdId}/{CtId}/start={startQuantity}/end={endQuantity}/step={step}");
     }
 
